@@ -157,6 +157,9 @@ def cnnTrain():
      
     在saver实例每次调用save方法时，都会创建三个数据文件和一个检查点（checkpoint）文件，
     权重等参数被以字典的形式保存到.ckpt.data中，图和元数据被保存到.ckpt.meta中，可以被tf.train.import_meta_graph加载到当前默认的图
+    加载restore时的文件路径名是以checkpoint文件中的“model_checkpoint_path”值决定的
+
+这个方法需要重新定义神经网络
     """
 
     with tf.Session() as sess:
@@ -192,6 +195,21 @@ log是事件文件所在的目录，这里是工程目录下的log目录。第�
                     # 准确率大于0.98时保存并退出
                     if acc > 0.98 and n > 1:
                         saver.save(sess, 'myface', global_step=n*num_batch+i)
+                        
+                        
+                        """
+                        
+                        saver.save(sess, 'my-model', global_step=0) ==> filename: 'my-model-0')
+                            第一个参数：训练模型的session
+
+                                第二个参数：模型保存成的文件名
+            
+                                第三个参数：（可以省略）可以给文件名加入一个step
+
+                                使用时调用Saver 对象的 restore() 函数
+                        
+                        
+                        """
                         sys.exit(0)
         print('accuracy less 0.98, exited!')
 
